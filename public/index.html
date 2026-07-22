@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Playlist Bridge — YouTube to Spotify</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="rail" aria-hidden="true"></div>
+
+  <main>
+    <header class="hero">
+      <span class="eyebrow">yt&nbsp;→&nbsp;sp</span>
+      <h1>Move a playlist from YouTube<br />into Spotify.</h1>
+      <p class="sub">Paste a public YouTube playlist link. We'll match every track on Spotify and build the playlist in your account.</p>
+    </header>
+
+    <section class="stage" id="stage-fetch">
+      <div class="stage-label">01 — Source</div>
+      <div class="field-row">
+        <input id="ytUrl" type="text" placeholder="https://www.youtube.com/playlist?list=..." autocomplete="off" />
+        <button id="fetchBtn" class="btn-primary">Fetch playlist</button>
+      </div>
+      <p id="fetchError" class="error-text" hidden></p>
+    </section>
+
+    <section class="stage" id="stage-connect" hidden>
+      <div class="stage-label">02 — Destination</div>
+      <div class="connect-row">
+        <p id="connectText">Connect your Spotify account to search for matches and create the playlist.</p>
+        <button id="connectBtn" class="btn-spotify">Connect Spotify</button>
+      </div>
+    </section>
+
+    <section class="stage" id="stage-match" hidden>
+      <div class="stage-label">03 — Matches</div>
+      <div class="match-summary">
+        <span id="matchSummary"></span>
+        <button id="matchBtn" class="btn-secondary">Find matches on Spotify</button>
+      </div>
+      <ul id="matchList" class="match-list"></ul>
+    </section>
+
+    <section class="stage" id="stage-create" hidden>
+      <div class="stage-label">04 — Create</div>
+      <div class="field-row">
+        <input id="playlistName" type="text" placeholder="Playlist name" />
+        <button id="createBtn" class="btn-primary">Create on Spotify</button>
+      </div>
+      <p id="createResult" class="result-text" hidden></p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
