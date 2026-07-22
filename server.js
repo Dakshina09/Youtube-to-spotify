@@ -272,18 +272,17 @@ app.post('/api/create-playlist', requireSpotifyAuth, async (req, res) => {
   try {
     await refreshSpotifyTokenIfNeeded(req);
     const token = req.session.spotify_access_token;
-    const userId = req.session.spotify_user_id;
     const { name, description, uris } = req.body;
 
-    if (!name || !Array.isArray(uris) || uris.length === 0) {
-      return res.status(400).json({ error: 'name and a non-empty uris array are required.' });
-    }
+if (!name || !Array.isArray(uris) || uris.length === 0) {
+  return res.status(400).json({ error: 'name and a non-empty uris array are required.' });
+}
 
-    const createResp = await axios.post(
-      `https://api.spotify.com/v1/users/${userId}/playlists`,
-      { name, description: description || 'Imported from YouTube', public: false },
-      { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
-    );
+const createResp = await axios.post(
+  `https://api.spotify.com/v1/me/playlists`,
+  { name, description: description || 'Imported from YouTube', public: false },
+  { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
+);
     const playlistId = createResp.data.id;
 
     // Spotify caps add-tracks at 100 URIs per request
