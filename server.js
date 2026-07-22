@@ -203,6 +203,7 @@ app.get('/auth/spotify/callback', async (req, res) => {
     req.session.spotify_access_token = resp.data.access_token;
     req.session.spotify_refresh_token = resp.data.refresh_token;
     req.session.spotify_expires_at = Date.now() + resp.data.expires_in * 1000;
+    console.log('SPOTIFY GRANTED SCOPE:', resp.data.scope);
 
     const me = await axios.get('https://api.spotify.com/v1/me', {
       headers: { Authorization: `Bearer ${resp.data.access_token}` }
@@ -274,15 +275,15 @@ app.post('/api/create-playlist', requireSpotifyAuth, async (req, res) => {
     const token = req.session.spotify_access_token;
     const { name, description, uris } = req.body;
 
-if (!name || !Array.isArray(uris) || uris.length === 0) {
-  return res.status(400).json({ error: 'name and a non-empty uris array are required.' });
-}
-
-const createResp = await axios.post(
-  `https://api.spotify.com/v1/me/playlists`,
-  { name, description: description || 'Imported from YouTube', public: false },
-  { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
-);
+    if (!name || !Array.isArray(uris) || uris.length === 0) {
+      return res.status(400).json({ error: 'name and a non-empty uris array are required.' });
+    }
+    
+    const createResp = await axios.post(
+      `https://api.spotify.com/v1/me/playlists`,
+      { name, description: description || 'Imported from YouTube', public: false },
+      { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
+    );
     const playlistId = createResp.data.id;
 
     // Spotify caps add-tracks at 100 URIs per request
