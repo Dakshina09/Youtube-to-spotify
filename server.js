@@ -171,7 +171,8 @@ app.get('/auth/spotify', (req, res) => {
     client_id: SPOTIFY_CLIENT_ID,
     scope,
     redirect_uri: SPOTIFY_REDIRECT_URI,
-    state
+    state,
+    show_dialog: 'true'
   });
   res.redirect(`https://accounts.spotify.com/authorize?${params.toString()}`);
 });
